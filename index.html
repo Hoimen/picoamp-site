@@ -1,11 +1,624 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>PicoAmp</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>PicoAmp | The Everything Robot</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tomorrow:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: "Tomorrow", sans-serif;
+      background: #070b10;
+      color: white;
+      overflow-x: hidden;
+    }
+
+    .glow {
+      position: fixed;
+      top: -250px;
+      right: -250px;
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, rgba(0, 140, 255, 0.22), transparent 70%);
+      z-index: -1;
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      padding: 18px 8%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(7, 11, 16, 0.82);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: 2px;
+    }
+
+    .brand img {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 22px;
+    }
+
+    .nav-links a {
+      color: #b8c3cf;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+
+    .nav-links a:hover { color: white; }
+
+    .hero {
+      min-height: 92vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 50px;
+      padding: 80px 8%;
+    }
+
+    .tag {
+      display: inline-block;
+      margin-bottom: 18px;
+      padding: 8px 14px;
+      border: 1px solid rgba(0,140,255,0.35);
+      border-radius: 999px;
+      color: #80caff;
+      background: rgba(0,140,255,0.08);
+      font-size: 0.9rem;
+    }
+
+    h1 {
+      font-size: clamp(3rem, 7vw, 6.2rem);
+      line-height: 0.95;
+      letter-spacing: 4px;
+      margin-bottom: 22px;
+    }
+
+    .hero p, .section-subtitle {
+      color: #a8b4c2;
+      line-height: 1.8;
+      font-size: 1.08rem;
+    }
+
+    .hero p {
+      max-width: 720px;
+      margin-bottom: 34px;
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .btn {
+      padding: 14px 24px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+
+    .primary {
+      background: #008cff;
+      color: white;
+    }
+
+    .secondary {
+      color: white;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.04);
+    }
+
+    .btn:hover { transform: translateY(-3px); }
+
+    .hero-image img {
+      width: 100%;
+      border-radius: 28px;
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 0 50px rgba(0,140,255,0.18);
+    }
+
+    section {
+      padding: 100px 8%;
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 4vw, 3rem);
+      margin-bottom: 18px;
+    }
+
+    .section-subtitle {
+      max-width: 900px;
+      margin-bottom: 40px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 22px;
+    }
+
+    .card {
+      padding: 26px;
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.035);
+      transition: 0.25s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(0,140,255,0.42);
+    }
+
+    .card h3 {
+      margin-bottom: 12px;
+      font-size: 1.25rem;
+    }
+
+    .card p, .card li {
+      color: #a8b4c2;
+      line-height: 1.7;
+    }
+
+    .card ul { padding-left: 20px; }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 35px;
+      align-items: center;
+    }
+
+    .split img, .image-card img {
+      width: 100%;
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: #05080c;
+    }
+
+    .image-card {
+      overflow: hidden;
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.035);
+    }
+
+    .image-card img {
+      height: 320px;
+      object-fit: cover;
+      border: none;
+      border-radius: 0;
+    }
+
+    .image-card div {
+      padding: 18px;
+      color: #c9d4df;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .contact-box {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 34px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, rgba(0,140,255,0.18), rgba(255,255,255,0.04));
+      border: 1px solid rgba(0,140,255,0.25);
+    }
+
+    footer {
+      padding: 35px 8%;
+      text-align: center;
+      color: #7d8a97;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    @media (max-width: 900px) {
+      .hero, .split {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .buttons {
+        justify-content: center;
+      }
+
+      .nav-links {
+        display: none;
+      }
+.lightbox img {
+    max-width: 92%;
+    max-height: 92%;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+}
+
+
+.lightbox.active {
+    display: flex;
+}
+
+.image-card {
+    cursor: pointer;
+}
+.lightbox {
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(circle at center,
+      rgba(25,35,50,0.96),
+      rgba(5,8,12,0.98));
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 40px;
+}
+
+.lightbox img {
+    max-width: 92%;
+    max-height: 92%;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+}
+
+.lightbox.active {
+    display: flex;
+}
+
+.image-card {
+    cursor: pointer;
+}
+  </style>
 </head>
+
 <body>
-  <h1>PicoAmp</h1>
-  <p>Robotics and AI projects.</p>
-  <p>Coming soon.</p>
+  <div class="glow"></div>
+
+  <nav>
+    <div class="brand">
+      <img src="logo-white.png" alt="PicoAmp logo">
+      <span>PICOAMP</span>
+    </div>
+
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#hardware">Hardware</a>
+      <a href="#software">Software</a>
+      <a href="#compatibility">Compatibility</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero">
+      <div>
+        <span class="tag">The Everything Robot</span>
+        <h1>PICOAMP</h1>
+
+        <p>
+          PicoAmp is an open-source AI robotic companion that can see, listen,
+          move, talk, and learn from you over time.
+        </p>
+
+        <div class="buttons">
+          <a class="btn primary" href="#projects">View Projects</a>
+          <div class="btn secondary" style="cursor:default;">
+  Admin@picoamp.dev
+</div>
+          <a class="btn secondary" href="https://github.com/Hoimen" target="_blank">GitHub</a>
+          <a class="btn secondary" href="https://www.youtube.com/channel/UCm4FZ2T2TPrIca9T8fusdug" target="_blank">YouTube</a>
+        </div>
+      </div>
+
+      <div class="hero-image">
+        <img src="product-photo.png" alt="PicoAmp robot and IO board">
+      </div>
+    </section>
+
+    <section id="about">
+      <h2 class="section-title">What is PicoAmp?</h2>
+      <p class="section-subtitle">
+        Imagine a smart assistant that does not just answer your questions,
+        but actually knows you. PicoAmp is like Alexa or Siri, but with vision,
+        motion, an open-source AI personality, and a customizable voice.
+      </p>
+
+      <div class="grid">
+        <div class="card">
+          <h3>Sees the world</h3>
+          <p>PicoAmp can use a front-facing camera to recognize and analyze objects.</p>
+        </div>
+
+        <div class="card">
+          <h3>Talks naturally</h3>
+          <p>It can speak back with a customizable voice and personality.</p>
+        </div>
+
+        <div class="card">
+          <h3>Learns over time</h3>
+          <p>PicoAmp is designed to adapt and feel more personal the more you use it.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="hardware">
+      <div class="split">
+        <div>
+          <h2 class="section-title">Custom Hardware</h2>
+          <p class="section-subtitle">
+            PicoAmp is built around a custom IO computing board designed for robot control,
+            display output, camera input, expansion, and modular development.
+          </p>
+
+          <div class="grid">
+            <div class="card">
+              <h3>IO Board</h3>
+              <p>Custom KiCad-designed board for the PicoAmp robot.</p>
+            </div>
+
+            <div class="card">
+              <h3>Robot Shell</h3>
+              <p>FreeCAD-designed body made to hold the electronics and display system.</p>
+            </div>
+          </div>
+        </div>
+
+        <img src="inside.png" alt="Inside PicoAmp shell with electronics">
+      </div>
+    </section>
+
+    <section id="software">
+      <div class="split">
+        <img src="display.png" alt="PicoAmp display running Raspberry Pi OS">
+
+        <div>
+          <h2 class="section-title">Software & Display</h2>
+          <p class="section-subtitle">
+            PicoAmp can run Raspberry Pi Linux, Raspberry Pi OS, or basically anything
+            you want to build on top of the Pi platform.
+          </p>
+
+          <div class="grid">
+            <div class="card">
+              <h3>Linux Based</h3>
+              <p>Runs Raspberry Pi OS or other compatible Linux systems.</p>
+            </div>
+
+            <div class="card">
+              <h3>Custom AI</h3>
+              <p>Built for customizable AI personalities, voices, and interfaces.</p>
+            </div>
+
+            <div class="card">
+              <h3>Display Ready</h3>
+              <p>Supports screen-based interfaces through the robot’s eye/display system.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="compatibility">
+      <h2 class="section-title">Compatibility</h2>
+      <p class="section-subtitle">
+        PicoAmp is designed to work with common Raspberry Pi 5 hardware and accessories,
+        making it easy to expand, modify, and experiment with.
+      </p>
+
+      <div class="split">
+        <div class="grid">
+          <div class="card"><h3>Antennas</h3><p>Compatible with external antennas for wireless expansion.</p></div>
+          <div class="card"><h3>Micro SD Cards</h3><p>Supports Micro SD storage for operating systems and files.</p></div>
+          <div class="card"><h3>Pi Camera</h3><p>Supports Raspberry Pi camera modules for vision-based interaction.</p></div>
+          <div class="card"><h3>Pi Fan</h3><p>Supports cooling hardware for stable performance.</p></div>
+          <div class="card"><h3>GPIO Pins</h3><p>Use GPIO for servos, sensors, lights, buttons, and other add-ons.</p></div>
+          <div class="card"><h3>Extra Screens</h3><p>Can support additional displays and custom visual interfaces.</p></div>
+        </div>
+
+        <img src="parts.png" alt="PicoAmp compatible parts and accessories">
+      </div>
+    </section>
+
+    <section id="projects">
+      <h2 class="section-title">Projects</h2>
+      <p class="section-subtitle">
+        PicoAmp is being built through open hardware, custom electronics,
+        CAD design, and software experimentation.
+      </p>
+
+      <div class="grid">
+        <div class="card">
+          <h3>PicoAmp IO Board</h3>
+          <p>A custom KiCad-designed IO and computing carrier board for PicoAmp.</p>
+        </div>
+
+        <div class="card">
+          <h3>PicoAmp Shell</h3>
+          <p>A FreeCAD-designed robot shell made to hold electronics, cameras, and moving parts.</p>
+        </div>
+
+        <div class="card">
+          <h3>External Materials List</h3>
+          <p>A parts and materials list for the robot build. More details coming soon.</p>
+        </div>
+      </div>
+    </section>
+
+<section id="gallery">
+  <h2 class="section-title">Gallery</h2>
+
+  <div class="grid">
+
+    <div class="image-card">
+      <img src="board.png" alt="PicoAmp IO board render">
+      <div>PicoAmp IO board render</div>
+    </div>
+
+    <div class="image-card">
+      <img src="shell.png" alt="PicoAmp shell CAD render">
+      <div>PicoAmp shell CAD render</div>
+    </div>
+
+    <div class="image-card">
+      <img src="pcb-layout.png" alt="PicoAmp PCB layout">
+      <div>PicoAmp PCB layout</div>
+    </div>
+
+    <div class="image-card">
+      <img src="prototype.png" alt="Current PicoAmp prototype">
+      <div>Current PicoAmp prototype</div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+/* Gallery Fix */
+.image-card {
+    cursor: pointer;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    overflow: visible;
+}
+
+.image-card img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+}
+
+.image-card div {
+    border-top: none !important;
+}
+
+/* Lightbox */
+.lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.92);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    padding: 40px;
+}
+
+.lightbox.active {
+    display: flex;
+}
+
+.lightbox img {
+    max-width: 95%;
+    max-height: 95%;
+    object-fit: contain;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+}
+</style>
+
+<div class="lightbox" id="lightbox">
+  <img id="lightbox-img" src="">
+</div>
+
+<script>
+const lightbox = document.getElementById("lightbox");
+const lightboxImg = document.getElementById("lightbox-img");
+
+document.querySelectorAll(".image-card img").forEach(img => {
+    img.addEventListener("click", () => {
+        lightbox.classList.add("active");
+        lightboxImg.src = img.src;
+    });
+});
+
+lightbox.addEventListener("click", () => {
+    lightbox.classList.remove("active");
+});
+</script>
+
+    <section id="contact">
+      <div class="contact-box">
+        <div>
+          <h2 class="section-title">Contact</h2>
+          <p class="section-subtitle">
+            Want to follow the project, collaborate, or ask a question?
+          </p>
+        </div>
+
+        <div class="buttons">
+          <div class="btn secondary" style="cursor:default;">
+  Admin@picoamp.dev
+</div>
+          <a class="btn secondary" href="https://github.com/Hoimen" target="_blank">GitHub</a>
+          <a class="btn secondary" href="https://www.youtube.com/channel/UCm4FZ2T2TPrIca9T8fusdug" target="_blank">YouTube</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © 2026 PicoAmp. The Everything Robot.
+  </footer>
+<div class="lightbox" id="lightbox">
+  <img id="lightbox-img" src="">
+</div>
+
+<script>
+  const lightbox = document.getElementById("lightbox");
+  const lightboxImg = document.getElementById("lightbox-img");
+
+  document.querySelectorAll(".image-card img").forEach(img => {
+    img.addEventListener("click", () => {
+      lightbox.classList.add("active");
+      lightboxImg.src = img.src;
+    });
+  });
+
+  lightbox.addEventListener("click", () => {
+    lightbox.classList.remove("active");
+  });
+</script>
 </body>
 </html>
